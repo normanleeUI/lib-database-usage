@@ -11,3 +11,4 @@ processed_data/
 *.xlsx
 *.db
 *.csv
+*.Rproj

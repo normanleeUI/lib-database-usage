@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Cleaning the Data | Visualizing the Data</title>
+  <meta name="description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Cleaning the Data | Visualizing the Data" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Cleaning the Data | Visualizing the Data" />
+  
+  <meta name="twitter:description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  
+
+<meta name="author" content="Norm Lee" />
+
+
+<meta name="date" content="2024-12-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="creating-populating-sql-database.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Cleaning a Dataset of U of I Variables</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Cleaning a Dataset of U of I Library Database Usage and Institutional Variables</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#motivation"><i class="fa fa-check"></i><b>1.1</b> Motivation</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#sources"><i class="fa fa-check"></i><b>1.2</b> Sources</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#end-goals"><i class="fa fa-check"></i><b>1.3</b> End goals</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#following-along"><i class="fa fa-check"></i><b>1.4</b> Following along</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html"><i class="fa fa-check"></i><b>2</b> Cleaning the Data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#importing-packages-data"><i class="fa fa-check"></i><b>2.1</b> Importing Packages &amp; Data</a></li>
+<li class="chapter" data-level="2.2" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#exploring-the-data"><i class="fa fa-check"></i><b>2.2</b> Exploring the Data</a></li>
+<li class="chapter" data-level="2.3" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#data-cleaning"><i class="fa fa-check"></i><b>2.3</b> Data Cleaning</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-research-outputs-data.frame."><i class="fa fa-check"></i><b>2.3.1</b> The Research Outputs Data.frame.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-enrollment-numbers-data.frame"><i class="fa fa-check"></i><b>2.4</b> The Enrollment Numbers Data.frame</a></li>
+<li class="chapter" data-level="2.5" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-grant-funding-data.frame"><i class="fa fa-check"></i><b>2.5</b> The Grant Funding Data.frame</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html"><i class="fa fa-check"></i><b>3</b> Creating &amp; Populating SQL Database</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#aggregating-university-level-variables"><i class="fa fa-check"></i><b>3.1</b> Aggregating University-Level Variables</a></li>
+<li class="chapter" data-level="3.2" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#aggregating-library-database-usage-data"><i class="fa fa-check"></i><b>3.2</b> Aggregating Library Database Usage Data</a></li>
+<li class="chapter" data-level="3.3" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#connecting-databases-to-colleges"><i class="fa fa-check"></i><b>3.3</b> Connecting Databases to Colleges</a></li>
+<li class="chapter" data-level="3.4" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#creating-the-sql-db-and-writing-to-it"><i class="fa fa-check"></i><b>3.4</b> Creating the SQL DB and Writing to it</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html"><i class="fa fa-check"></i><b>4</b> Visualizing the Data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#loading-the-data"><i class="fa fa-check"></i><b>4.1</b> Loading the Data</a></li>
+<li class="chapter" data-level="4.2" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#visualizing-the-data-1"><i class="fa fa-check"></i><b>4.2</b> Visualizing the Data</a></li>
+<li class="chapter" data-level="4.3" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#conclusion"><i class="fa fa-check"></i><b>4.3</b> Conclusion</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Visualizing the Data</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="cleaning-the-data" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Cleaning the Data<a href="cleaning-the-data.html#cleaning-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="importing-packages-data" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Importing Packages &amp; Data<a href="cleaning-the-data.html#importing-packages-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>First, we import a number of packages with convenient functions:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="cleaning-the-data.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># helps data processing</span></span>
+<span id="cb1-2"><a href="cleaning-the-data.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(DBI) <span class="co"># allow sql operations in R</span></span>
+<span id="cb1-3"><a href="cleaning-the-data.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(readxl) <span class="co"># allow creation of data.frame from xlsx</span></span>
+<span id="cb1-4"><a href="cleaning-the-data.html#cb1-4" tabindex="-1"></a><span class="fu">library</span>(cli) <span class="co"># color console outputs for easy reading</span></span>
+<span id="cb1-5"><a href="cleaning-the-data.html#cb1-5" tabindex="-1"></a><span class="fu">library</span>(lubridate) <span class="co"># helps date processing</span></span>
+<span id="cb1-6"><a href="cleaning-the-data.html#cb1-6" tabindex="-1"></a><span class="fu">library</span>(stringr) <span class="co"># help string/substring processing</span></span>
+<span id="cb1-7"><a href="cleaning-the-data.html#cb1-7" tabindex="-1"></a><span class="fu">library</span>(uuid) <span class="co"># generate unique identifiers</span></span>
+<span id="cb1-8"><a href="cleaning-the-data.html#cb1-8" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># generate visualizations</span></span>
+<span id="cb1-9"><a href="cleaning-the-data.html#cb1-9" tabindex="-1"></a><span class="fu">library</span>(ggrepel) <span class="co"># labelling for ggplots</span></span></code></pre></div>
+<p>Then we import the data:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="cleaning-the-data.html#cb2-1" tabindex="-1"></a><span class="co"># Library database usage</span></span>
+<span id="cb2-2"><a href="cleaning-the-data.html#cb2-2" tabindex="-1"></a>az_database_list <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&#39;raw_data/az_database_list.csv&#39;</span>)</span>
+<span id="cb2-3"><a href="cleaning-the-data.html#cb2-3" tabindex="-1"></a>az_database_usage <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&#39;raw_data/database_usage_by_month.csv&#39;</span>)</span>
+<span id="cb2-4"><a href="cleaning-the-data.html#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="cleaning-the-data.html#cb2-5" tabindex="-1"></a><span class="co"># U of I research outputs from VERSO</span></span>
+<span id="cb2-6"><a href="cleaning-the-data.html#cb2-6" tabindex="-1"></a>research_outputs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&#39;raw_data/research-outputs-by-ay-and-college.csv&#39;</span>)</span>
+<span id="cb2-7"><a href="cleaning-the-data.html#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="cleaning-the-data.html#cb2-8" tabindex="-1"></a><span class="co"># Enrollment numbers from RI dashboards</span></span>
+<span id="cb2-9"><a href="cleaning-the-data.html#cb2-9" tabindex="-1"></a>spring_enrollment <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">&#39;raw_data/spring-enrollment_by_college-major-and-semester.xlsx&#39;</span>)</span>
+<span id="cb2-10"><a href="cleaning-the-data.html#cb2-10" tabindex="-1"></a>fall_enrollment <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">&#39;raw_data/fall-enrollment_by_college-major-and-semester.xlsx&#39;</span>)</span>
+<span id="cb2-11"><a href="cleaning-the-data.html#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="cleaning-the-data.html#cb2-12" tabindex="-1"></a><span class="co"># Grant expenditures from research report archives</span></span>
+<span id="cb2-13"><a href="cleaning-the-data.html#cb2-13" tabindex="-1"></a>grant_funding <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">&#39;raw_data/funding-reports-combined_by_college-and-fy.xlsx&#39;</span>)</span></code></pre></div>
+</div>
+<div id="exploring-the-data" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Exploring the Data<a href="cleaning-the-data.html#exploring-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Since the data is raw and messy the first thing we want to do is get a sense of the columns and data types in our new data.frames.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="cleaning-the-data.html#cb3-1" tabindex="-1"></a><span class="fu">View</span>(az_database_list) <span class="co"># view data.frame</span></span>
+<span id="cb3-2"><a href="cleaning-the-data.html#cb3-2" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">colnames</span>(az_database_list)){ <span class="co"># get list of columns and their data types.</span></span>
+<span id="cb3-3"><a href="cleaning-the-data.html#cb3-3" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">col_blue</span>(i), <span class="st">&#39;: &#39;</span>, <span class="fu">col_red</span>(az_database_list[[i]]), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>) <span class="co"># color-code the output for easy reading</span></span>
+<span id="cb3-4"><a href="cleaning-the-data.html#cb3-4" tabindex="-1"></a>}</span>
+<span id="cb3-5"><a href="cleaning-the-data.html#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="cleaning-the-data.html#cb3-6" tabindex="-1"></a><span class="fu">View</span>(az_database_usage)</span>
+<span id="cb3-7"><a href="cleaning-the-data.html#cb3-7" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">colnames</span>(az_database_usage)){</span>
+<span id="cb3-8"><a href="cleaning-the-data.html#cb3-8" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">col_blue</span>(i), <span class="st">&#39;: &#39;</span>, <span class="fu">col_red</span>(az_database_usage[[i]]), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-9"><a href="cleaning-the-data.html#cb3-9" tabindex="-1"></a>}</span>
+<span id="cb3-10"><a href="cleaning-the-data.html#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="cleaning-the-data.html#cb3-11" tabindex="-1"></a><span class="fu">View</span>(fall_enrollment)</span>
+<span id="cb3-12"><a href="cleaning-the-data.html#cb3-12" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">colnames</span>(fall_enrollment)){</span>
+<span id="cb3-13"><a href="cleaning-the-data.html#cb3-13" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">col_blue</span>(i), <span class="st">&#39;: &#39;</span>, <span class="fu">col_red</span>(fall_enrollment[[i]]), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-14"><a href="cleaning-the-data.html#cb3-14" tabindex="-1"></a>}</span>
+<span id="cb3-15"><a href="cleaning-the-data.html#cb3-15" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="cleaning-the-data.html#cb3-16" tabindex="-1"></a><span class="fu">View</span>(spring_enrollment)</span>
+<span id="cb3-17"><a href="cleaning-the-data.html#cb3-17" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">colnames</span>(spring_enrollment)){</span>
+<span id="cb3-18"><a href="cleaning-the-data.html#cb3-18" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">col_blue</span>(i), <span class="st">&#39;: &#39;</span>, <span class="fu">col_red</span>(spring_enrollment[[i]]), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-19"><a href="cleaning-the-data.html#cb3-19" tabindex="-1"></a>}</span>
+<span id="cb3-20"><a href="cleaning-the-data.html#cb3-20" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="cleaning-the-data.html#cb3-21" tabindex="-1"></a><span class="fu">View</span>(grant_funding)</span>
+<span id="cb3-22"><a href="cleaning-the-data.html#cb3-22" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">colnames</span>(grant_funding)){</span>
+<span id="cb3-23"><a href="cleaning-the-data.html#cb3-23" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">col_blue</span>(i), <span class="st">&#39;: &#39;</span>, <span class="fu">col_red</span>(grant_funding[[i]]), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-24"><a href="cleaning-the-data.html#cb3-24" tabindex="-1"></a>}</span>
+<span id="cb3-25"><a href="cleaning-the-data.html#cb3-25" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="cleaning-the-data.html#cb3-26" tabindex="-1"></a><span class="fu">View</span>(research_outputs)</span>
+<span id="cb3-27"><a href="cleaning-the-data.html#cb3-27" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">colnames</span>(research_outputs)){</span>
+<span id="cb3-28"><a href="cleaning-the-data.html#cb3-28" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">col_blue</span>(i), <span class="st">&#39;: &#39;</span>, <span class="fu">col_red</span>(research_outputs[[i]]), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-29"><a href="cleaning-the-data.html#cb3-29" tabindex="-1"></a>}</span></code></pre></div>
+<p>Technically, this didn’t need to be a <code>for loop</code>. But, as a Python native, at this point in the project I wasn’t used to R’s innate vectorization and the apply family functions. Now I leave them in to remember my roots and where I come from. :D</p>
+</div>
+<div id="data-cleaning" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Data Cleaning<a href="cleaning-the-data.html#data-cleaning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>With that done, we can start the data cleaning. First, by removing columns we obviously do not need and re-naming the ones we do need to avoid issues with special characters in the future:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="cleaning-the-data.html#cb4-1" tabindex="-1"></a>az_database_list <span class="ot">&lt;-</span> <span class="fu">select</span>(az_database_list,</span>
+<span id="cb4-2"><a href="cleaning-the-data.html#cb4-2" tabindex="-1"></a>                           <span class="at">id =</span> <span class="st">&quot;ID&quot;</span>,</span>
+<span id="cb4-3"><a href="cleaning-the-data.html#cb4-3" tabindex="-1"></a>                           <span class="at">name =</span> <span class="st">&quot;Name&quot;</span>,</span>
+<span id="cb4-4"><a href="cleaning-the-data.html#cb4-4" tabindex="-1"></a>                           <span class="at">description =</span> <span class="st">&quot;Description&quot;</span>,</span>
+<span id="cb4-5"><a href="cleaning-the-data.html#cb4-5" tabindex="-1"></a>                           <span class="at">date_created =</span> <span class="st">&quot;Created&quot;</span>,</span>
+<span id="cb4-6"><a href="cleaning-the-data.html#cb4-6" tabindex="-1"></a>                           <span class="at">vendor =</span> <span class="st">&quot;Vendor&quot;</span>,</span>
+<span id="cb4-7"><a href="cleaning-the-data.html#cb4-7" tabindex="-1"></a>                           <span class="at">subjects =</span> <span class="st">&quot;Subjects&quot;</span>)</span>
+<span id="cb4-8"><a href="cleaning-the-data.html#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="cleaning-the-data.html#cb4-9" tabindex="-1"></a>fall_enrollment <span class="ot">&lt;-</span> <span class="fu">select</span>(fall_enrollment,</span>
+<span id="cb4-10"><a href="cleaning-the-data.html#cb4-10" tabindex="-1"></a>                          <span class="at">college =</span> <span class="st">&quot;College&quot;</span>,</span>
+<span id="cb4-11"><a href="cleaning-the-data.html#cb4-11" tabindex="-1"></a>                          <span class="at">term =</span> <span class="st">&quot;Term Description&quot;</span>,</span>
+<span id="cb4-12"><a href="cleaning-the-data.html#cb4-12" tabindex="-1"></a>                          <span class="at">enrollment =</span> <span class="st">&quot;Count (Data suppression) 1&quot;</span>)</span>
+<span id="cb4-13"><a href="cleaning-the-data.html#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="cleaning-the-data.html#cb4-14" tabindex="-1"></a>spring_enrollment <span class="ot">&lt;-</span> <span class="fu">select</span>(spring_enrollment,</span>
+<span id="cb4-15"><a href="cleaning-the-data.html#cb4-15" tabindex="-1"></a>                            <span class="at">college =</span> <span class="st">&quot;College&quot;</span>,</span>
+<span id="cb4-16"><a href="cleaning-the-data.html#cb4-16" tabindex="-1"></a>                            <span class="at">term =</span> <span class="st">&quot;Term Description&quot;</span>,</span>
+<span id="cb4-17"><a href="cleaning-the-data.html#cb4-17" tabindex="-1"></a>                            <span class="at">enrollment =</span> <span class="st">&quot;Count (Data suppression) 1&quot;</span>)</span>
+<span id="cb4-18"><a href="cleaning-the-data.html#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="cleaning-the-data.html#cb4-19" tabindex="-1"></a>grant_funding <span class="ot">&lt;-</span> <span class="fu">select</span>(grant_funding,</span>
+<span id="cb4-20"><a href="cleaning-the-data.html#cb4-20" tabindex="-1"></a>                        <span class="at">fiscal_year =</span> <span class="st">&quot;fiscal-year&quot;</span>,</span>
+<span id="cb4-21"><a href="cleaning-the-data.html#cb4-21" tabindex="-1"></a>                        college,</span>
+<span id="cb4-22"><a href="cleaning-the-data.html#cb4-22" tabindex="-1"></a>                        <span class="at">grant_proposals =</span> <span class="st">&quot;Number of proposals&quot;</span>,</span>
+<span id="cb4-23"><a href="cleaning-the-data.html#cb4-23" tabindex="-1"></a>                        <span class="at">grant_funding =</span> <span class="st">&quot;research expenditures&quot;</span>)</span></code></pre></div>
+<p>From there, we can begin cleaning the data sources one by one. The processing for each of these was done in one big pipe chain, but to make it more readable, I’ve broken it into discrete chunks. The original pipe chains can be found in 03-preprocess-raw-data.R.</p>
+<div id="the-research-outputs-data.frame." class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> The Research Outputs Data.frame.<a href="cleaning-the-data.html#the-research-outputs-data.frame." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The ultimate goal for this data.frame is to have a data.frame that counts the number of publications each college published each fiscal year. So, our observational unit “Fiscal Year + College”. E.g., “The College of Engineering produced X publications in fiscal year 2020”.</p>
+<blockquote>
+<p><strong>This was my first mistake with tidiness! Technically, concatenating fiscal year and college into one column is untidy. However, as we’ll see during the “visualization” section, this error does not actually make processing the data much more difficult.</strong></p>
+</blockquote>
+<p>Within the research outputs data.frame, each research asset is affiliated with one or more colleges based on the affiliation(s) of the author(s). Unfortunately, each affiliation is listed in its own column. Based on looking at the data.frame colnames, we can tell assets have between 1 and 7 columns dedicated to their affiliations. We need to collapse those into one column that contains a vector of all the asset’s affiliations:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="cleaning-the-data.html#cb5-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(<span class="fu">unlist</span>(research_outputs[<span class="dv">9</span><span class="sc">:</span><span class="dv">16</span>]))) <span class="co"># used to determine whether empty cells contained &quot;&quot;, NA&#39;s, NULLs, or other values</span></span>
+<span id="cb5-2"><a href="cleaning-the-data.html#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="cleaning-the-data.html#cb5-3" tabindex="-1"></a>research_outputs <span class="ot">&lt;-</span> research_outputs <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="cleaning-the-data.html#cb5-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">unit_affiliations =</span></span>
+<span id="cb5-5"><a href="cleaning-the-data.html#cb5-5" tabindex="-1"></a>           <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(research_outputs), <span class="cf">function</span>(i){</span>
+<span id="cb5-6"><a href="cleaning-the-data.html#cb5-6" tabindex="-1"></a>             <span class="fu">unique</span>(research_outputs[i, <span class="dv">9</span><span class="sc">:</span><span class="dv">16</span>][research_outputs[i, <span class="dv">9</span><span class="sc">:</span><span class="dv">16</span>] <span class="sc">!=</span> <span class="st">&quot;&quot;</span>]) <span class="co"># != condition based on print statement above</span></span>
+<span id="cb5-7"><a href="cleaning-the-data.html#cb5-7" tabindex="-1"></a>           })</span>
+<span id="cb5-8"><a href="cleaning-the-data.html#cb5-8" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-9"><a href="cleaning-the-data.html#cb5-9" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">asset_id =</span> <span class="st">&quot;Asset.Id&quot;</span>,</span>
+<span id="cb5-10"><a href="cleaning-the-data.html#cb5-10" tabindex="-1"></a>         <span class="at">pub_year =</span> <span class="st">&quot;Asset.Published.Date..String.&quot;</span>,</span>
+<span id="cb5-11"><a href="cleaning-the-data.html#cb5-11" tabindex="-1"></a>         <span class="at">type =</span> <span class="st">&quot;Asset.Type&quot;</span>,</span>
+<span id="cb5-12"><a href="cleaning-the-data.html#cb5-12" tabindex="-1"></a>         unit_affiliations) <span class="co"># remove the 7 columns that were previously dedicated to asset affiliations</span></span>
+<span id="cb5-13"><a href="cleaning-the-data.html#cb5-13" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="cleaning-the-data.html#cb5-14" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb5-15"><a href="cleaning-the-data.html#cb5-15" tabindex="-1"></a><span class="co"># debug</span></span>
+<span id="cb5-16"><a href="cleaning-the-data.html#cb5-16" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(<span class="fu">unlist</span>(research_outputs<span class="sc">$</span>unit_affiliations))) <span class="co"># check to make sure all expected Colleges are somewhere in the new unit affiliations column</span></span>
+<span id="cb5-17"><a href="cleaning-the-data.html#cb5-17" tabindex="-1"></a><span class="do">###</span></span></code></pre></div>
+<p>Next, we need to determine which fiscal year the assets were published in because many University level variables are reported based on fiscal year and we want the asset data to mesh with that.</p>
+<p>To do so, we need to clean the “pub_year” column, creating lubridate-friendly values. Unfortunately, dates are stored in a variety of formats:</p>
+<ol style="list-style-type: decimal">
+<li>YYYY</li>
+<li>DD/MM/YYYY</li>
+<li>MM/DD/YYYY</li>
+<li>YY-MMM (where MMM is a 3 letter abbreviation such as “Jan”)</li>
+<li>MMM-YY</li>
+</ol>
+<p>Huge thanks to <a href="https://regex101.com/" class="uri">https://regex101.com/</a> and <a href="https://regex-generator.olafneumann.org/" class="uri">https://regex-generator.olafneumann.org/</a> for helping me create and debug the regular expressions that uniquely pick out the date formats seen in the data.frame!</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="cleaning-the-data.html#cb6-1" tabindex="-1"></a><span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="cleaning-the-data.html#cb6-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-3"><a href="cleaning-the-data.html#cb6-3" tabindex="-1"></a>    <span class="at">pub_year_cleaned =</span> <span class="fu">case_when</span>( <span class="co"># use regex to parse different date formats into lubridate friendly strings</span></span>
+<span id="cb6-4"><a href="cleaning-the-data.html#cb6-4" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^</span><span class="sc">\\</span><span class="st">d{4}$&quot;</span>) <span class="sc">~</span> <span class="fu">mdy</span>(<span class="fu">paste0</span>(<span class="st">&#39;01/01/&#39;</span>,pub_year)),</span>
+<span id="cb6-5"><a href="cleaning-the-data.html#cb6-5" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(</span><span class="sc">\\</span><span class="st">d{4}$)&quot;</span>) <span class="sc">~</span> <span class="fu">dmy</span>(pub_year),</span>
+<span id="cb6-6"><a href="cleaning-the-data.html#cb6-6" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^([1-9]|1[12])/([1-9]|[12][0-9]|3[01])/(19|20)</span><span class="sc">\\</span><span class="st">d{2}$&quot;</span>) <span class="sc">~</span> <span class="fu">mdy</span>(pub_year),</span>
+<span id="cb6-7"><a href="cleaning-the-data.html#cb6-7" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^</span><span class="sc">\\</span><span class="st">d{1,2}-[a-zA-Z]{3}$&quot;</span>) <span class="sc">~</span> <span class="fu">ymd</span>(</span>
+<span id="cb6-8"><a href="cleaning-the-data.html#cb6-8" tabindex="-1"></a>        <span class="fu">paste0</span>(</span>
+<span id="cb6-9"><a href="cleaning-the-data.html#cb6-9" tabindex="-1"></a>          <span class="fu">str_replace</span>(<span class="fu">str_extract</span>(pub_year, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d{1,2}&quot;</span>),</span>
+<span id="cb6-10"><a href="cleaning-the-data.html#cb6-10" tabindex="-1"></a>                      <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d{1,2}&quot;</span>,</span>
+<span id="cb6-11"><a href="cleaning-the-data.html#cb6-11" tabindex="-1"></a>                      <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,<span class="fu">str_extract</span>(pub_year, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d{1,2}&quot;</span>),<span class="st">&#39;-&#39;</span>,<span class="fu">str_extract</span>(pub_year, <span class="st">&#39;[a-zA-Z]{3}&#39;</span>),<span class="st">&#39;-&#39;</span>,<span class="st">&#39;01&#39;</span>)))),</span>
+<span id="cb6-12"><a href="cleaning-the-data.html#cb6-12" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^[a-zA-Z]{3}-</span><span class="sc">\\</span><span class="st">d{1,2}$&quot;</span>) <span class="sc">~</span> <span class="fu">ymd</span>(</span>
+<span id="cb6-13"><a href="cleaning-the-data.html#cb6-13" tabindex="-1"></a>        <span class="fu">paste0</span>(</span>
+<span id="cb6-14"><a href="cleaning-the-data.html#cb6-14" tabindex="-1"></a>          <span class="fu">str_replace</span>(<span class="fu">str_extract</span>(pub_year, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d{1,2}&quot;</span>),</span>
+<span id="cb6-15"><a href="cleaning-the-data.html#cb6-15" tabindex="-1"></a>                      <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d{1,2}&quot;</span>,</span>
+<span id="cb6-16"><a href="cleaning-the-data.html#cb6-16" tabindex="-1"></a>                      <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,<span class="fu">str_extract</span>(pub_year, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">d{1,2}&quot;</span>),<span class="st">&#39;-&#39;</span>,<span class="fu">str_extract</span>(pub_year, <span class="st">&#39;[a-zA-Z]{3}&#39;</span>),<span class="st">&#39;-&#39;</span>,<span class="st">&#39;01&#39;</span>)))),</span>
+<span id="cb6-17"><a href="cleaning-the-data.html#cb6-17" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">as_date</span>(pub_year)</span>
+<span id="cb6-18"><a href="cleaning-the-data.html#cb6-18" tabindex="-1"></a>    ),</span>
+<span id="cb6-19"><a href="cleaning-the-data.html#cb6-19" tabindex="-1"></a>    </span>
+<span id="cb6-20"><a href="cleaning-the-data.html#cb6-20" tabindex="-1"></a>    <span class="at">needs_fy_sim =</span> <span class="fu">case_when</span>( <span class="co"># dummy column. For publications where only &quot;YYYY&quot; dates are provided there isn&#39;t enough info to determine fy, so must be simulated</span></span>
+<span id="cb6-21"><a href="cleaning-the-data.html#cb6-21" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^</span><span class="sc">\\</span><span class="st">d{4}$&quot;</span>) <span class="sc">~</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-22"><a href="cleaning-the-data.html#cb6-22" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(</span><span class="sc">\\</span><span class="st">d{4}$)&quot;</span>) <span class="sc">~</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-23"><a href="cleaning-the-data.html#cb6-23" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^([1-9]|1[12])/([1-9]|[12][0-9]|3[01])/(19|20)</span><span class="sc">\\</span><span class="st">d{2}$&quot;</span>) <span class="sc">~</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-24"><a href="cleaning-the-data.html#cb6-24" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^</span><span class="sc">\\</span><span class="st">d{1,2}-[a-zA-Z]{3}$&quot;</span>) <span class="sc">~</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-25"><a href="cleaning-the-data.html#cb6-25" tabindex="-1"></a>      <span class="fu">str_detect</span>(pub_year, <span class="st">&quot;^[a-zA-Z]{3}-</span><span class="sc">\\</span><span class="st">d{1,2}$&quot;</span>) <span class="sc">~</span> <span class="cn">FALSE</span></span>
+<span id="cb6-26"><a href="cleaning-the-data.html#cb6-26" tabindex="-1"></a>    )</span>
+<span id="cb6-27"><a href="cleaning-the-data.html#cb6-27" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-28"><a href="cleaning-the-data.html#cb6-28" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-29"><a href="cleaning-the-data.html#cb6-29" tabindex="-1"></a>    <span class="at">random_number =</span> <span class="fu">runif</span>(<span class="fu">n</span>()), <span class="co"># generate a column of random numbers</span></span>
+<span id="cb6-30"><a href="cleaning-the-data.html#cb6-30" tabindex="-1"></a>    <span class="at">fiscal_year =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-31"><a href="cleaning-the-data.html#cb6-31" tabindex="-1"></a>      needs_fy_sim <span class="sc">==</span> <span class="cn">TRUE</span> <span class="sc">&amp;</span> random_number <span class="sc">&lt;</span> <span class="fl">0.5</span> <span class="sc">~</span> <span class="fu">as.integer</span>(<span class="fu">year</span>(pub_year_cleaned)), <span class="co"># randomly generate a fiscal year based on whether a randomly generated number is above or below 0.5</span></span>
+<span id="cb6-32"><a href="cleaning-the-data.html#cb6-32" tabindex="-1"></a>      needs_fy_sim <span class="sc">==</span> <span class="cn">TRUE</span> <span class="sc">&amp;</span> random_number <span class="sc">&gt;=</span> <span class="fl">0.5</span> <span class="sc">~</span> <span class="fu">as.integer</span>(<span class="fu">year</span>(pub_year_cleaned))<span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb6-33"><a href="cleaning-the-data.html#cb6-33" tabindex="-1"></a>      needs_fy_sim <span class="sc">==</span> <span class="cn">FALSE</span> <span class="sc">&amp;</span> <span class="fu">month</span>(pub_year_cleaned) <span class="sc">&gt;=</span> <span class="dv">7</span> <span class="sc">~</span> <span class="fu">as.integer</span>(<span class="fu">year</span>(pub_year_cleaned)), <span class="co"># else, just extract month from lubridate dates, using a July - June fiscal year</span></span>
+<span id="cb6-34"><a href="cleaning-the-data.html#cb6-34" tabindex="-1"></a>      needs_fy_sim <span class="sc">==</span> <span class="cn">FALSE</span> <span class="sc">&amp;</span> <span class="fu">month</span>(pub_year_cleaned) <span class="sc">&lt;</span> <span class="dv">7</span> <span class="sc">~</span> <span class="fu">as.integer</span>(<span class="fu">year</span>(pub_year_cleaned))<span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb6-35"><a href="cleaning-the-data.html#cb6-35" tabindex="-1"></a>    ))</span></code></pre></div>
+<p>Now, we run into a data limitation. If an asset is affiliated with multiple colleges within a particular fiscal year, how do we count it? Does each College get the credit for one entire output, or something else?</p>
+<p>Recall that the idea behind this project is - eventually - we may want to investigate how University variables relate to Library database usage. Because of that, we’re not actually interested in the research outputs themselves, they are just an imprecise proxy. Instead, we want some representation of the “effort” a researcher had to go through to publish that asset, “effort” which might have led them to access journal articles, conference papers, etc., through the Library’s databases.</p>
+<p>Consequently, it didn’t make much sense to simply assign each College one entire output, because presumably the “effort” of producing the asset is shared across authors. So, rather than assigning one asset per affiliated College, I assigned <code>1 / (number of units affiliated with the asset)</code>. So, if one professor from Engineering and one from Science co-authored a paper, each College would get 0.5 of an asset.</p>
+<p>Obviously, this <code>1 / (number of units affiliated with the asset)</code> is only slightly more nuanced than just assigning 1 to each College. However, implementing it as code at least makes the assumptions and causal story I’m telling more explicit:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="cleaning-the-data.html#cb7-1" tabindex="-1"></a><span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="cleaning-the-data.html#cb7-2" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-3"><a href="cleaning-the-data.html#cb7-3" tabindex="-1"></a>    <span class="at">count_unique_affiliations =</span> <span class="fu">sapply</span>(unit_affiliations, <span class="cf">function</span>(i) <span class="fu">length</span>(i)),</span>
+<span id="cb7-4"><a href="cleaning-the-data.html#cb7-4" tabindex="-1"></a>    <span class="at">effort_per_affiliation =</span> <span class="dv">1</span><span class="sc">/</span>count_unique_affiliations)</span></code></pre></div>
+<p>Afterwards, there’s just some clean-up:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="cleaning-the-data.html#cb8-1" tabindex="-1"></a><span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="cleaning-the-data.html#cb8-2" tabindex="-1"></a>  <span class="fu">na.omit</span>(pub_year_cleaned) <span class="sc">%&gt;%</span> <span class="co"># remove research outputs without dates</span></span>
+<span id="cb8-3"><a href="cleaning-the-data.html#cb8-3" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>random_number, <span class="co"># remove columns that are no longer necessary</span></span>
+<span id="cb8-4"><a href="cleaning-the-data.html#cb8-4" tabindex="-1"></a>         <span class="sc">-</span>pub_year,</span>
+<span id="cb8-5"><a href="cleaning-the-data.html#cb8-5" tabindex="-1"></a>         <span class="sc">-</span>needs_fy_sim)</span></code></pre></div>
+<p>Now, we have a data.frame that lists every research asset, its fiscal year, and associated College(s) - where associated Colleges is a vector of length &gt;= 1. We just need to group by “College + Fiscal Year” and add up the assets.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="cleaning-the-data.html#cb9-1" tabindex="-1"></a>research_output_counts <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-2"><a href="cleaning-the-data.html#cb9-2" tabindex="-1"></a>  <span class="at">fy_college =</span> <span class="co"># create &quot;College + Fiscal Year&quot; ID values </span></span>
+<span id="cb9-3"><a href="cleaning-the-data.html#cb9-3" tabindex="-1"></a>    <span class="fu">unlist</span>( </span>
+<span id="cb9-4"><a href="cleaning-the-data.html#cb9-4" tabindex="-1"></a>      <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(research_outputs), <span class="cf">function</span>(i){</span>
+<span id="cb9-5"><a href="cleaning-the-data.html#cb9-5" tabindex="-1"></a>        <span class="fu">paste0</span>(research_outputs<span class="sc">$</span>fiscal_year[[i]], </span>
+<span id="cb9-6"><a href="cleaning-the-data.html#cb9-6" tabindex="-1"></a>               research_outputs<span class="sc">$</span>unit_affiliations[[i]])</span>
+<span id="cb9-7"><a href="cleaning-the-data.html#cb9-7" tabindex="-1"></a>      })</span>
+<span id="cb9-8"><a href="cleaning-the-data.html#cb9-8" tabindex="-1"></a>    ),</span>
+<span id="cb9-9"><a href="cleaning-the-data.html#cb9-9" tabindex="-1"></a>  </span>
+<span id="cb9-10"><a href="cleaning-the-data.html#cb9-10" tabindex="-1"></a>  <span class="at">output_effort_units =</span> </span>
+<span id="cb9-11"><a href="cleaning-the-data.html#cb9-11" tabindex="-1"></a>    <span class="fu">unlist</span>(</span>
+<span id="cb9-12"><a href="cleaning-the-data.html#cb9-12" tabindex="-1"></a>      <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(research_outputs), <span class="cf">function</span>(i){</span>
+<span id="cb9-13"><a href="cleaning-the-data.html#cb9-13" tabindex="-1"></a>        <span class="fu">rep</span>(research_outputs<span class="sc">$</span>effort_per_affiliation[[i]], <span class="fu">length</span>(research_outputs<span class="sc">$</span>unit_affiliations[[i]])) <span class="co"># since an fy_college value is created for each of the units affiliated with a single research output, we have to ascribe the research output&#39;s &quot;effort&quot; value as many times as there are academic units</span></span>
+<span id="cb9-14"><a href="cleaning-the-data.html#cb9-14" tabindex="-1"></a>      })</span>
+<span id="cb9-15"><a href="cleaning-the-data.html#cb9-15" tabindex="-1"></a>    ),</span>
+<span id="cb9-16"><a href="cleaning-the-data.html#cb9-16" tabindex="-1"></a>  </span>
+<span id="cb9-17"><a href="cleaning-the-data.html#cb9-17" tabindex="-1"></a>  <span class="at">asset_id =</span></span>
+<span id="cb9-18"><a href="cleaning-the-data.html#cb9-18" tabindex="-1"></a>    <span class="fu">unlist</span>(</span>
+<span id="cb9-19"><a href="cleaning-the-data.html#cb9-19" tabindex="-1"></a>      <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(research_outputs), <span class="cf">function</span>(i){</span>
+<span id="cb9-20"><a href="cleaning-the-data.html#cb9-20" tabindex="-1"></a>        <span class="fu">rep</span>(research_outputs<span class="sc">$</span>asset_id[[i]], <span class="fu">length</span>(research_outputs<span class="sc">$</span>unit_affiliations[[i]]))</span>
+<span id="cb9-21"><a href="cleaning-the-data.html#cb9-21" tabindex="-1"></a>      })</span>
+<span id="cb9-22"><a href="cleaning-the-data.html#cb9-22" tabindex="-1"></a>    )</span>
+<span id="cb9-23"><a href="cleaning-the-data.html#cb9-23" tabindex="-1"></a>) </span></code></pre></div>
+<p>Before we do the final summation, I also created a debugging data.frame to make sure the <code>sapply(...rep(...))</code> behavior worked as expected, transferring the proper data in the proper order from <code>research_outputs</code> to <code>research_output_counts</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="cleaning-the-data.html#cb10-1" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb10-2"><a href="cleaning-the-data.html#cb10-2" tabindex="-1"></a><span class="co"># debug - not part of pipe chain, performed before final summing</span></span>
+<span id="cb10-3"><a href="cleaning-the-data.html#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="cleaning-the-data.html#cb10-4" tabindex="-1"></a>research_output_debug <span class="ot">&lt;-</span> <span class="fu">left_join</span>(research_output_counts, research_outputs, <span class="at">by =</span> <span class="st">&quot;asset_id&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="cleaning-the-data.html#cb10-5" tabindex="-1"></a>   <span class="fu">select</span>(asset_id,</span>
+<span id="cb10-6"><a href="cleaning-the-data.html#cb10-6" tabindex="-1"></a>          fy_college,</span>
+<span id="cb10-7"><a href="cleaning-the-data.html#cb10-7" tabindex="-1"></a>          pub_year_cleaned,</span>
+<span id="cb10-8"><a href="cleaning-the-data.html#cb10-8" tabindex="-1"></a>          unit_affiliations,</span>
+<span id="cb10-9"><a href="cleaning-the-data.html#cb10-9" tabindex="-1"></a>          output_effort_units,</span>
+<span id="cb10-10"><a href="cleaning-the-data.html#cb10-10" tabindex="-1"></a>          effort_per_affiliation) <span class="sc">%&gt;%</span></span>
+<span id="cb10-11"><a href="cleaning-the-data.html#cb10-11" tabindex="-1"></a>   <span class="fu">mutate</span>(</span>
+<span id="cb10-12"><a href="cleaning-the-data.html#cb10-12" tabindex="-1"></a>     <span class="at">effort_match =</span> <span class="fu">case_when</span>(</span>
+<span id="cb10-13"><a href="cleaning-the-data.html#cb10-13" tabindex="-1"></a>       output_effort_units <span class="sc">==</span> effort_per_affiliation <span class="sc">~</span> <span class="st">&#39;GOOD&#39;</span>,</span>
+<span id="cb10-14"><a href="cleaning-the-data.html#cb10-14" tabindex="-1"></a>       output_effort_units <span class="sc">!=</span> effort_per_affiliation <span class="sc">~</span> <span class="st">&#39;BAD&#39;</span>,</span>
+<span id="cb10-15"><a href="cleaning-the-data.html#cb10-15" tabindex="-1"></a>       <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA</span></span>
+<span id="cb10-16"><a href="cleaning-the-data.html#cb10-16" tabindex="-1"></a>     ),</span>
+<span id="cb10-17"><a href="cleaning-the-data.html#cb10-17" tabindex="-1"></a>     <span class="at">fy_date_match =</span> <span class="fu">case_when</span>(</span>
+<span id="cb10-18"><a href="cleaning-the-data.html#cb10-18" tabindex="-1"></a>     <span class="fu">as.integer</span>(<span class="fu">str_sub</span>(fy_college, <span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="dv">4</span>)) <span class="sc">==</span> <span class="fu">year</span>(pub_year_cleaned) <span class="sc">~</span> <span class="st">&#39;GOOD&#39;</span>, <span class="co"># for things published July - December</span></span>
+<span id="cb10-19"><a href="cleaning-the-data.html#cb10-19" tabindex="-1"></a>     <span class="fu">year</span>(pub_year_cleaned) <span class="sc">-</span> <span class="fu">as.integer</span>(<span class="fu">str_sub</span>(fy_college, <span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="dv">4</span>)) <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&#39;GOOD&#39;</span>, <span class="co"># for things published January - June</span></span>
+<span id="cb10-20"><a href="cleaning-the-data.html#cb10-20" tabindex="-1"></a>     <span class="fu">year</span>(pub_year_cleaned) <span class="sc">-</span> <span class="fu">as.integer</span>(<span class="fu">str_sub</span>(fy_college, <span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="dv">4</span>)) <span class="sc">!=</span> <span class="dv">1</span><span class="sc">|</span><span class="dv">0</span> <span class="sc">~</span> <span class="st">&#39;BAD&#39;</span>,</span>
+<span id="cb10-21"><a href="cleaning-the-data.html#cb10-21" tabindex="-1"></a>     <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA</span></span>
+<span id="cb10-22"><a href="cleaning-the-data.html#cb10-22" tabindex="-1"></a>   )</span>
+<span id="cb10-23"><a href="cleaning-the-data.html#cb10-23" tabindex="-1"></a>   )</span>
+<span id="cb10-24"><a href="cleaning-the-data.html#cb10-24" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="cleaning-the-data.html#cb10-25" tabindex="-1"></a> <span class="fu">view</span>(<span class="fu">filter</span>(research_output_debug, effort_match <span class="sc">==</span> <span class="st">&quot;BAD&quot;</span> <span class="sc">|</span> affiliations_match <span class="sc">==</span> <span class="st">&quot;BAD&quot;</span> <span class="sc">|</span> fy_college <span class="sc">==</span> <span class="st">&quot;BAD&quot;</span>))</span>
+<span id="cb10-26"><a href="cleaning-the-data.html#cb10-26" tabindex="-1"></a><span class="do">###</span></span></code></pre></div>
+<p>Afterward, we can (finally!), group by fiscal year and college, then sum:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="cleaning-the-data.html#cb11-1" tabindex="-1"></a><span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="cleaning-the-data.html#cb11-2" tabindex="-1"></a>  <span class="fu">group_by</span>(fy_college) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="cleaning-the-data.html#cb11-3" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_outputs =</span> <span class="fu">sum</span>(output_effort_units, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+</div>
+</div>
+<div id="the-enrollment-numbers-data.frame" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> The Enrollment Numbers Data.frame<a href="cleaning-the-data.html#the-enrollment-numbers-data.frame" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Enrollment numbers is reported by term and department, so the ultimate goal is to sum department numbers into College numbers, convert term to fiscal year, and to create fiscal year + College identifiers.</p>
+<p>First, we take a look at the College names in the data.frames to check if they’re consistent:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="cleaning-the-data.html#cb12-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(fall_enrollment<span class="sc">$</span>college))</span>
+<span id="cb12-2"><a href="cleaning-the-data.html#cb12-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(spring_enrollment<span class="sc">$</span>college))</span></code></pre></div>
+<p>Thankfully, they are, so the rest is quite straightforward:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="cleaning-the-data.html#cb13-1" tabindex="-1"></a>fall_enrollment <span class="ot">&lt;-</span> fall_enrollment <span class="sc">%&gt;%</span>  </span>
+<span id="cb13-2"><a href="cleaning-the-data.html#cb13-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fy_college =</span> <span class="fu">case_when</span>(</span>
+<span id="cb13-3"><a href="cleaning-the-data.html#cb13-3" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Agricultural &amp; Life Sciences&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;cals&#39;</span>), <span class="co"># &quot;Term&quot; is listed like &quot;Fall 2024&quot; in the document, so we can just take the last four characters</span></span>
+<span id="cb13-4"><a href="cleaning-the-data.html#cb13-4" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Art &amp; Architecture&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;caa&#39;</span>),</span>
+<span id="cb13-5"><a href="cleaning-the-data.html#cb13-5" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Business &amp; Economics&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;cbe&#39;</span>),</span>
+<span id="cb13-6"><a href="cleaning-the-data.html#cb13-6" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Education, Health &amp; Human Sci|WWAMI&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;cehhs&#39;</span>),</span>
+<span id="cb13-7"><a href="cleaning-the-data.html#cb13-7" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Engineering&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;coe&#39;</span>),</span>
+<span id="cb13-8"><a href="cleaning-the-data.html#cb13-8" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Letters Arts &amp; Social Sciences&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;class&#39;</span>),</span>
+<span id="cb13-9"><a href="cleaning-the-data.html#cb13-9" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Law&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;law&#39;</span>),</span>
+<span id="cb13-10"><a href="cleaning-the-data.html#cb13-10" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Natural Resources&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;cnr&#39;</span>),</span>
+<span id="cb13-11"><a href="cleaning-the-data.html#cb13-11" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;^Science$&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>),<span class="st">&#39;cos&#39;</span>),</span>
+<span id="cb13-12"><a href="cleaning-the-data.html#cb13-12" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA</span></span>
+<span id="cb13-13"><a href="cleaning-the-data.html#cb13-13" tabindex="-1"></a>  )</span>
+<span id="cb13-14"><a href="cleaning-the-data.html#cb13-14" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-15"><a href="cleaning-the-data.html#cb13-15" tabindex="-1"></a>  <span class="fu">group_by</span>(fy_college) <span class="sc">%&gt;%</span></span>
+<span id="cb13-16"><a href="cleaning-the-data.html#cb13-16" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">enrollment =</span> <span class="fu">sum</span>(enrollment, <span class="at">na.rm =</span>  <span class="cn">TRUE</span>)) <span class="co"># generate data frame that sums enrollment numbers</span></span>
+<span id="cb13-17"><a href="cleaning-the-data.html#cb13-17" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="cleaning-the-data.html#cb13-18" tabindex="-1"></a>spring_enrollment <span class="ot">&lt;-</span> spring_enrollment <span class="sc">%&gt;%</span>  </span>
+<span id="cb13-19"><a href="cleaning-the-data.html#cb13-19" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fy_college =</span> <span class="fu">case_when</span>(</span>
+<span id="cb13-20"><a href="cleaning-the-data.html#cb13-20" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Agricultural &amp; Life Sciences&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;cals&#39;</span>), <span class="co"># note the addition of the as.integer(...)-1 here because the &quot;Spring 2024&quot; term is in fiscal year 2023.</span></span>
+<span id="cb13-21"><a href="cleaning-the-data.html#cb13-21" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Art &amp; Architecture&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;caa&#39;</span>),</span>
+<span id="cb13-22"><a href="cleaning-the-data.html#cb13-22" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Business &amp; Economics&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;cbe&#39;</span>),</span>
+<span id="cb13-23"><a href="cleaning-the-data.html#cb13-23" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Education, Health &amp; Human Sci|WWAMI&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;cehhs&#39;</span>),</span>
+<span id="cb13-24"><a href="cleaning-the-data.html#cb13-24" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Engineering&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;coe&#39;</span>),</span>
+<span id="cb13-25"><a href="cleaning-the-data.html#cb13-25" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Letters Arts &amp; Social Sciences&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;class&#39;</span>),</span>
+<span id="cb13-26"><a href="cleaning-the-data.html#cb13-26" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Law&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;law&#39;</span>),</span>
+<span id="cb13-27"><a href="cleaning-the-data.html#cb13-27" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;Natural Resources&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;cnr&#39;</span>),</span>
+<span id="cb13-28"><a href="cleaning-the-data.html#cb13-28" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="st">&quot;^Science$&quot;</span>) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="fu">as.integer</span>(<span class="fu">str_sub</span>(term, <span class="at">start =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">-</span><span class="dv">1</span>,<span class="st">&#39;cos&#39;</span>),</span>
+<span id="cb13-29"><a href="cleaning-the-data.html#cb13-29" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA</span></span>
+<span id="cb13-30"><a href="cleaning-the-data.html#cb13-30" tabindex="-1"></a>  )</span>
+<span id="cb13-31"><a href="cleaning-the-data.html#cb13-31" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-32"><a href="cleaning-the-data.html#cb13-32" tabindex="-1"></a>  <span class="fu">group_by</span>(fy_college) <span class="sc">%&gt;%</span></span>
+<span id="cb13-33"><a href="cleaning-the-data.html#cb13-33" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">enrollment =</span> <span class="fu">sum</span>(enrollment, <span class="at">na.rm =</span>  <span class="cn">TRUE</span>))</span></code></pre></div>
+</div>
+<div id="the-grant-funding-data.frame" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> The Grant Funding Data.frame<a href="cleaning-the-data.html#the-grant-funding-data.frame" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The ultimate goal for grant funding is basically identical to enrollment, so the code looks very similar.</p>
+<p>Again, we make sure the College names are consistent:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="cleaning-the-data.html#cb14-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">table</span>(grant_funding<span class="sc">$</span>college))</span></code></pre></div>
+<p>In this case, they are decidedly not, so our <code>str_detects</code> have to be more flexible, but still uniquely pick out the proper Colleges. Also, because grant expenditure is reported for units like the Provost Office, RCDS, etc., to keep it consistent with the enrollment data we have to omit those units (again, another non-trivial research choice):</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="cleaning-the-data.html#cb15-1" tabindex="-1"></a>grant_funding <span class="ot">&lt;-</span> grant_funding <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="cleaning-the-data.html#cb15-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fy_college =</span> <span class="fu">case_when</span>(</span>
+<span id="cb15-3"><a href="cleaning-the-data.html#cb15-3" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;Agricultural &amp;|and Life Sciences&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;cals&#39;</span>),</span>
+<span id="cb15-4"><a href="cleaning-the-data.html#cb15-4" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;Letters, Arts &amp;|and Social Sci&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;class&#39;</span>),</span>
+<span id="cb15-5"><a href="cleaning-the-data.html#cb15-5" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;Art &amp;|and Architecture&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;caa&#39;</span>),</span>
+<span id="cb15-6"><a href="cleaning-the-data.html#cb15-6" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;Business &amp;|and Economics&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;cbe&#39;</span>),</span>
+<span id="cb15-7"><a href="cleaning-the-data.html#cb15-7" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;Education|WWAMI|Health&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;cehhs&#39;</span>),</span>
+<span id="cb15-8"><a href="cleaning-the-data.html#cb15-8" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;Engineering&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;coe&#39;</span>),</span>
+<span id="cb15-9"><a href="cleaning-the-data.html#cb15-9" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;law&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;law&#39;</span>),</span>
+<span id="cb15-10"><a href="cleaning-the-data.html#cb15-10" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;Natural Resources&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;cnr&#39;</span>),</span>
+<span id="cb15-11"><a href="cleaning-the-data.html#cb15-11" tabindex="-1"></a>    <span class="fu">str_detect</span>(college, <span class="fu">regex</span>(<span class="st">&quot;College of Science&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="fu">paste0</span>(<span class="st">&#39;20&#39;</span>,fiscal_year,<span class="st">&#39;cos&#39;</span>),</span>
+<span id="cb15-12"><a href="cleaning-the-data.html#cb15-12" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA</span></span>
+<span id="cb15-13"><a href="cleaning-the-data.html#cb15-13" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(fy_college) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-14"><a href="cleaning-the-data.html#cb15-14" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">grant_funding =</span> <span class="fu">sum</span>(grant_funding, <span class="at">na.rm =</span>  <span class="cn">TRUE</span>),</span>
+<span id="cb15-15"><a href="cleaning-the-data.html#cb15-15" tabindex="-1"></a>            <span class="at">grant_proposals =</span> <span class="fu">sum</span>(<span class="fu">as.integer</span>(grant_proposals), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-16"><a href="cleaning-the-data.html#cb15-16" tabindex="-1"></a>  <span class="fu">na.omit</span>(fy_college)</span></code></pre></div>
+<p>But, that’s it! We’re done with data cleaning and can move on to creating our ‘tidy’ (but actually not so tidy, as it turns out) data.frames for processing and visualization.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="creating-populating-sql-database.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-data-cleaning.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

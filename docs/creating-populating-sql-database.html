@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Creating &amp; Populating SQL Database | Visualizing the Data</title>
+  <meta name="description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Creating &amp; Populating SQL Database | Visualizing the Data" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Creating &amp; Populating SQL Database | Visualizing the Data" />
+  
+  <meta name="twitter:description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  
+
+<meta name="author" content="Norm Lee" />
+
+
+<meta name="date" content="2024-12-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="cleaning-the-data.html"/>
+<link rel="next" href="visualizing-the-data.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Cleaning a Dataset of U of I Variables</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Cleaning a Dataset of U of I Library Database Usage and Institutional Variables</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#motivation"><i class="fa fa-check"></i><b>1.1</b> Motivation</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#sources"><i class="fa fa-check"></i><b>1.2</b> Sources</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#end-goals"><i class="fa fa-check"></i><b>1.3</b> End goals</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#following-along"><i class="fa fa-check"></i><b>1.4</b> Following along</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html"><i class="fa fa-check"></i><b>2</b> Cleaning the Data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#importing-packages-data"><i class="fa fa-check"></i><b>2.1</b> Importing Packages &amp; Data</a></li>
+<li class="chapter" data-level="2.2" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#exploring-the-data"><i class="fa fa-check"></i><b>2.2</b> Exploring the Data</a></li>
+<li class="chapter" data-level="2.3" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#data-cleaning"><i class="fa fa-check"></i><b>2.3</b> Data Cleaning</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-research-outputs-data.frame."><i class="fa fa-check"></i><b>2.3.1</b> The Research Outputs Data.frame.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-enrollment-numbers-data.frame"><i class="fa fa-check"></i><b>2.4</b> The Enrollment Numbers Data.frame</a></li>
+<li class="chapter" data-level="2.5" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-grant-funding-data.frame"><i class="fa fa-check"></i><b>2.5</b> The Grant Funding Data.frame</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html"><i class="fa fa-check"></i><b>3</b> Creating &amp; Populating SQL Database</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#aggregating-university-level-variables"><i class="fa fa-check"></i><b>3.1</b> Aggregating University-Level Variables</a></li>
+<li class="chapter" data-level="3.2" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#aggregating-library-database-usage-data"><i class="fa fa-check"></i><b>3.2</b> Aggregating Library Database Usage Data</a></li>
+<li class="chapter" data-level="3.3" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#connecting-databases-to-colleges"><i class="fa fa-check"></i><b>3.3</b> Connecting Databases to Colleges</a></li>
+<li class="chapter" data-level="3.4" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#creating-the-sql-db-and-writing-to-it"><i class="fa fa-check"></i><b>3.4</b> Creating the SQL DB and Writing to it</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html"><i class="fa fa-check"></i><b>4</b> Visualizing the Data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#loading-the-data"><i class="fa fa-check"></i><b>4.1</b> Loading the Data</a></li>
+<li class="chapter" data-level="4.2" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#visualizing-the-data-1"><i class="fa fa-check"></i><b>4.2</b> Visualizing the Data</a></li>
+<li class="chapter" data-level="4.3" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#conclusion"><i class="fa fa-check"></i><b>4.3</b> Conclusion</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Visualizing the Data</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="creating-populating-sql-database" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Creating &amp; Populating SQL Database<a href="creating-populating-sql-database.html#creating-populating-sql-database" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="aggregating-university-level-variables" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Aggregating University-Level Variables<a href="creating-populating-sql-database.html#aggregating-university-level-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Since we’ve made sure grants, research outputs, and enrollment numbers all have the fiscal year + College identifier, joining those tables together is easy:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="creating-populating-sql-database.html#cb16-1" tabindex="-1"></a>university_variables <span class="ot">&lt;-</span> <span class="fu">full_join</span>(spring_enrollment, fall_enrollment, <span class="at">by =</span> <span class="st">&quot;fy_college&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="creating-populating-sql-database.html#cb16-2" tabindex="-1"></a>  <span class="fu">full_join</span>(research_output_counts, <span class="at">by =</span> <span class="st">&quot;fy_college&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="creating-populating-sql-database.html#cb16-3" tabindex="-1"></a>  <span class="fu">full_join</span>(grant_funding, <span class="at">by =</span> <span class="st">&quot;fy_college&quot;</span>)</span></code></pre></div>
+<p>However, here we run into a problem about the range of the fiscal year + College identifiers. The Library’s VERSO system has assets going back to the mid-20th century all the way up to 2024. But, the raw data doesn’t include enrollment or grant numbers for that entire range.</p>
+<p>Turns out, according to…</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="creating-populating-sql-database.html#cb17-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(<span class="fu">na.omit</span>(spring_enrollment_sums<span class="sc">$</span>fy_college))[<span class="dv">1</span>]) <span class="co"># sort the fy_college columns and get the first member</span></span>
+<span id="cb17-2"><a href="creating-populating-sql-database.html#cb17-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(<span class="fu">na.omit</span>(spring_enrollment_sums<span class="sc">$</span>fy_college))[<span class="fu">length</span>(<span class="fu">na.omit</span>(spring_enrollment_sums<span class="sc">$</span>fy_college))]) <span class="co"># get the last member</span></span>
+<span id="cb17-3"><a href="creating-populating-sql-database.html#cb17-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(<span class="fu">na.omit</span>(fall_enrollment_sums<span class="sc">$</span>fy_college))[<span class="dv">1</span>])</span>
+<span id="cb17-4"><a href="creating-populating-sql-database.html#cb17-4" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(<span class="fu">na.omit</span>(fall_enrollment_sums<span class="sc">$</span>fy_college))[<span class="fu">length</span>(<span class="fu">na.omit</span>(fall_enrollment_sums<span class="sc">$</span>fy_college))])</span>
+<span id="cb17-5"><a href="creating-populating-sql-database.html#cb17-5" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(<span class="fu">na.omit</span>(research_output_counts<span class="sc">$</span>fy_college))[<span class="dv">1</span>])</span>
+<span id="cb17-6"><a href="creating-populating-sql-database.html#cb17-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(<span class="fu">na.omit</span>(research_output_counts<span class="sc">$</span>fy_college))[<span class="fu">length</span>(<span class="fu">na.omit</span>(research_output_counts<span class="sc">$</span>fy_college))])</span>
+<span id="cb17-7"><a href="creating-populating-sql-database.html#cb17-7" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(<span class="fu">na.omit</span>(grant_funding<span class="sc">$</span>fy_college))[<span class="dv">1</span>])</span>
+<span id="cb17-8"><a href="creating-populating-sql-database.html#cb17-8" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">sort</span>(<span class="fu">na.omit</span>(grant_funding<span class="sc">$</span>fy_college))[<span class="fu">length</span>(<span class="fu">na.omit</span>(grant_funding<span class="sc">$</span>fy_college))])</span></code></pre></div>
+<p>…our raw data only covers all of these variables from FY 2015 to 2022. Rather than deal with incomplete data, I chose to omit all other years.</p>
+<p>Joining this table also forced me to make an interesting decision about enrollment. Spring and fall enrollment came in two different tables, and the numbers in each are slightly different. Given that the observational unit is the fiscal year that spans both terms, how should I handle that?</p>
+<p>Again, if we might want our assessment to tell a story about how the number of people enrolled in the University affects Library database use, it seems plausible to just add the two numbers. Originally, this seemed odd to me because many of the people enrolled in fall semester will probably also be enrolled in spring semester so it seemed like double-counting. However, similar to research outputs, we’re not interested in individual people per se, but instead the effort they might expend at the University, leading them to use Library resources. Someone enrolled for two semesters presumably expends two semesters’ worth of effort, so they can plausibly be counted twice.</p>
+<p>This is imprecise but, again, at least we’ve codified (<em>code</em>-ified! :D) the assumption:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="creating-populating-sql-database.html#cb18-1" tabindex="-1"></a><span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="creating-populating-sql-database.html#cb18-2" tabindex="-1"></a>  <span class="fu">na.omit</span>(fy_college) <span class="sc">%&gt;%</span> <span class="co"># remove anything not between 2015-2022</span></span>
+<span id="cb18-3"><a href="creating-populating-sql-database.html#cb18-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_enrollment =</span> enrollment.x<span class="sc">+</span>enrollment.y <span class="sc">%&gt;%</span> <span class="co"># sum spring &amp; fall enrollment </span></span>
+<span id="cb18-4"><a href="creating-populating-sql-database.html#cb18-4" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>enrollment.x, <span class="co"># remove columns that are no longer necessary</span></span>
+<span id="cb18-5"><a href="creating-populating-sql-database.html#cb18-5" tabindex="-1"></a>         <span class="sc">-</span>enrollment.y)</span></code></pre></div>
+</div>
+<div id="aggregating-library-database-usage-data" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Aggregating Library Database Usage Data<a href="creating-populating-sql-database.html#aggregating-library-database-usage-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<blockquote>
+<p><strong>This is where my second, and more serious, error with tidiness occurred.</strong></p>
+</blockquote>
+<p>Essentially, the original spreadsheet contained a Library database in each row. But, the database view counts for every month from fiscal year 2015 - 2022 each had their own column. So, Web of Science would have a columns for ‘2015.07 total views’, ‘2015.08 total views’, etc. My mistake was to just sum the proper columns for each row:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="creating-populating-sql-database.html#cb19-1" tabindex="-1"></a>database_stats <span class="ot">&lt;-</span> <span class="fu">left_join</span>(az_database_usage, az_database_list, <span class="at">by =</span> <span class="fu">join_by</span>(ID <span class="sc">==</span> id)) <span class="co"># join data.frames containing database names, id&#39;s etc., with dataframe containing usage info</span></span>
+<span id="cb19-2"><a href="creating-populating-sql-database.html#cb19-2" tabindex="-1"></a>database_stats <span class="ot">&lt;-</span> database_stats <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="creating-populating-sql-database.html#cb19-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_views_fy15 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">12</span><span class="sc">:</span><span class="dv">23</span>]), <span class="co"># sum monthly viewership columns into fiscal year viewerships</span></span>
+<span id="cb19-4"><a href="creating-populating-sql-database.html#cb19-4" tabindex="-1"></a>         <span class="at">total_views_fy16 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">24</span><span class="sc">:</span><span class="dv">35</span>]),</span>
+<span id="cb19-5"><a href="creating-populating-sql-database.html#cb19-5" tabindex="-1"></a>         <span class="at">total_views_fy17 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">36</span><span class="sc">:</span><span class="dv">47</span>]),</span>
+<span id="cb19-6"><a href="creating-populating-sql-database.html#cb19-6" tabindex="-1"></a>         <span class="at">total_views_fy18 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">48</span><span class="sc">:</span><span class="dv">59</span>]),</span>
+<span id="cb19-7"><a href="creating-populating-sql-database.html#cb19-7" tabindex="-1"></a>         <span class="at">total_views_fy19 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">60</span><span class="sc">:</span><span class="dv">71</span>]),</span>
+<span id="cb19-8"><a href="creating-populating-sql-database.html#cb19-8" tabindex="-1"></a>         <span class="at">total_views_fy20 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">72</span><span class="sc">:</span><span class="dv">83</span>]),</span>
+<span id="cb19-9"><a href="creating-populating-sql-database.html#cb19-9" tabindex="-1"></a>         <span class="at">total_views_fy21 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">84</span><span class="sc">:</span><span class="dv">95</span>]),</span>
+<span id="cb19-10"><a href="creating-populating-sql-database.html#cb19-10" tabindex="-1"></a>         <span class="at">total_views_fy22 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">96</span><span class="sc">:</span><span class="dv">107</span>]),</span>
+<span id="cb19-11"><a href="creating-populating-sql-database.html#cb19-11" tabindex="-1"></a>         <span class="at">total_views_fy23 =</span> <span class="fu">rowSums</span>(database_stats[,<span class="dv">108</span><span class="sc">:</span><span class="dv">119</span>]),</span>
+<span id="cb19-12"><a href="creating-populating-sql-database.html#cb19-12" tabindex="-1"></a>         <span class="at">remaining_views =</span> <span class="fu">rowSums</span>(database_stats[,<span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">11</span>,<span class="dv">120</span><span class="sc">:</span><span class="dv">125</span>)]),</span>
+<span id="cb19-13"><a href="creating-populating-sql-database.html#cb19-13" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-14"><a href="creating-populating-sql-database.html#cb19-14" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb19-15"><a href="creating-populating-sql-database.html#cb19-15" tabindex="-1"></a>    <span class="at">database_id =</span> <span class="st">&quot;ID&quot;</span>,</span>
+<span id="cb19-16"><a href="creating-populating-sql-database.html#cb19-16" tabindex="-1"></a>    <span class="at">database_name =</span> <span class="st">&quot;Name&quot;</span>,</span>
+<span id="cb19-17"><a href="creating-populating-sql-database.html#cb19-17" tabindex="-1"></a>    <span class="at">database_subjects =</span> <span class="st">&quot;subjects&quot;</span>,</span>
+<span id="cb19-18"><a href="creating-populating-sql-database.html#cb19-18" tabindex="-1"></a>    <span class="at">total_database_views =</span> <span class="st">&quot;Total&quot;</span>,</span>
+<span id="cb19-19"><a href="creating-populating-sql-database.html#cb19-19" tabindex="-1"></a>    total_views_fy15,</span>
+<span id="cb19-20"><a href="creating-populating-sql-database.html#cb19-20" tabindex="-1"></a>    total_views_fy16,</span>
+<span id="cb19-21"><a href="creating-populating-sql-database.html#cb19-21" tabindex="-1"></a>    total_views_fy17,</span>
+<span id="cb19-22"><a href="creating-populating-sql-database.html#cb19-22" tabindex="-1"></a>    total_views_fy18,</span>
+<span id="cb19-23"><a href="creating-populating-sql-database.html#cb19-23" tabindex="-1"></a>    total_views_fy19,</span>
+<span id="cb19-24"><a href="creating-populating-sql-database.html#cb19-24" tabindex="-1"></a>    total_views_fy20,</span>
+<span id="cb19-25"><a href="creating-populating-sql-database.html#cb19-25" tabindex="-1"></a>    total_views_fy21,</span>
+<span id="cb19-26"><a href="creating-populating-sql-database.html#cb19-26" tabindex="-1"></a>    total_views_fy22,</span>
+<span id="cb19-27"><a href="creating-populating-sql-database.html#cb19-27" tabindex="-1"></a>    <span class="co"># total_views_fy23,</span></span>
+<span id="cb19-28"><a href="creating-populating-sql-database.html#cb19-28" tabindex="-1"></a>    <span class="co"># remaining_views,</span></span>
+<span id="cb19-29"><a href="creating-populating-sql-database.html#cb19-29" tabindex="-1"></a>  )</span>
+<span id="cb19-30"><a href="creating-populating-sql-database.html#cb19-30" tabindex="-1"></a></span>
+<span id="cb19-31"><a href="creating-populating-sql-database.html#cb19-31" tabindex="-1"></a><span class="do">### </span></span>
+<span id="cb19-32"><a href="creating-populating-sql-database.html#cb19-32" tabindex="-1"></a><span class="co"># debug</span></span>
+<span id="cb19-33"><a href="creating-populating-sql-database.html#cb19-33" tabindex="-1"></a><span class="co"># database_stats &lt;- database_stats %&gt;% </span></span>
+<span id="cb19-34"><a href="creating-populating-sql-database.html#cb19-34" tabindex="-1"></a><span class="co">#   mutate(math_check = rowSums(database_stats[,5:14]) == total_database_views) %&gt;% </span></span>
+<span id="cb19-35"><a href="creating-populating-sql-database.html#cb19-35" tabindex="-1"></a><span class="co">#   filter(math_check == FALSE)</span></span>
+<span id="cb19-36"><a href="creating-populating-sql-database.html#cb19-36" tabindex="-1"></a><span class="do">###</span></span></code></pre></div>
+<p>What I should have done was to never join the az_database_list and az_database_usage data.frames in the first place. Instead, I should’ve linked the az_database_list table - which contained things like database_names to the database usage once via some id.</p>
+<p>I didn’t do that because of three limitations in my thinking:</p>
+<ol style="list-style-type: decimal">
+<li>I unquestioningly accepted that all the database info, including views, should remain in the same data.frame (and therefore the same table in the SQL database). It seemed obvious to me that doing so would make processing easier; something I only discovered was wrong late in the project when attempting to visualize interesting relationships.</li>
+<li>I knew that having many repetitive entries within a single column can be an indicator of untidy data. Given (1) above as a constraint, the easiest way to aggregate all database view information into a single column was to pivot_longer the database table. E.g., using something like this:</li>
+</ol>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="creating-populating-sql-database.html#cb20-1" tabindex="-1"></a><span class="co"># an unusued version of the database_statistics data.frame.</span></span>
+<span id="cb20-2"><a href="creating-populating-sql-database.html#cb20-2" tabindex="-1"></a>transposed_database_stats <span class="ot">=</span> <span class="fu">pivot_longer</span>(database_stats, <span class="at">cols =</span> total_views_fy15<span class="sc">:</span>total_views_fy22) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="creating-populating-sql-database.html#cb20-3" tabindex="-1"></a>  <span class="fu">select</span>(id,</span>
+<span id="cb20-4"><a href="creating-populating-sql-database.html#cb20-4" tabindex="-1"></a>         database_name,</span>
+<span id="cb20-5"><a href="creating-populating-sql-database.html#cb20-5" tabindex="-1"></a>         relevant_colleges,</span>
+<span id="cb20-6"><a href="creating-populating-sql-database.html#cb20-6" tabindex="-1"></a>         <span class="at">fiscal_year =</span> <span class="st">&quot;name&quot;</span>,</span>
+<span id="cb20-7"><a href="creating-populating-sql-database.html#cb20-7" tabindex="-1"></a>         <span class="at">views =</span> <span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="creating-populating-sql-database.html#cb20-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fiscal_year =</span> <span class="fu">paste0</span>(<span class="st">&quot;20&quot;</span>,<span class="fu">str_sub</span>(fiscal_year, <span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>)),</span>
+<span id="cb20-9"><a href="creating-populating-sql-database.html#cb20-9" tabindex="-1"></a>         <span class="at">fy_college =</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(relevant_colleges), <span class="cf">function</span>(x){</span>
+<span id="cb20-10"><a href="creating-populating-sql-database.html#cb20-10" tabindex="-1"></a>           <span class="fu">lapply</span>(relevant_colleges[[x]], <span class="cf">function</span>(y) <span class="fu">paste0</span>(fiscal_year[[x]],y))</span>
+<span id="cb20-11"><a href="creating-populating-sql-database.html#cb20-11" tabindex="-1"></a>         }))</span></code></pre></div>
+<p>However, the snippet above leads to lots of repetition in columns like database_name, id (i.e., a database id), and relevant_colleges, so it seemed wrong to me.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>The final limitation was that, after worrying about repetitive entries but failing to realize splitting the data.frame was a reasonable option, I failed to notice that keeping each FY’s views in its own column ultimately violates the tidy data precept of one variable per column.</li>
+</ol>
+<p>Regardless, I continued on my merry way until I started trying to visualize things.</p>
+</div>
+<div id="connecting-databases-to-colleges" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Connecting Databases to Colleges<a href="creating-populating-sql-database.html#connecting-databases-to-colleges" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the meantime, I still need to somehow connect databases to our other observational unit of “FY + College”. To do so, I keyword search the database_stats “subjects” column - “subjects” as in “these are academic subjects where a researcher might find this database useful” - assuming there is some connection between:</p>
+<ol style="list-style-type: decimal">
+<li>The work researchers do and the Colleges they are enrolled in.</li>
+<li>The subject tags and how users actually choose which database to access.</li>
+</ol>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="creating-populating-sql-database.html#cb21-1" tabindex="-1"></a><span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="creating-populating-sql-database.html#cb21-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">relevant_colleges =</span><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(database_stats), <span class="cf">function</span>(i){</span>
+<span id="cb21-3"><a href="creating-populating-sql-database.html#cb21-3" tabindex="-1"></a>    college_list <span class="ot">=</span> <span class="fu">c</span>( <span class="co"># initialize a vector to contain relevant Colleges for each database</span></span>
+<span id="cb21-4"><a href="creating-populating-sql-database.html#cb21-4" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;Business|Economics&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;cbe&quot;</span>), <span class="co"># make keyword searches to determine relevant Colleges based on database &quot;subjects&quot;</span></span>
+<span id="cb21-5"><a href="creating-populating-sql-database.html#cb21-5" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;Computing|Electronics|Engineering|Chemistry|environmental&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;coe&quot;</span>),</span>
+<span id="cb21-6"><a href="creating-populating-sql-database.html#cb21-6" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;Education|Health|Medicine|curriculum&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;cehhs&quot;</span>),</span>
+<span id="cb21-7"><a href="creating-populating-sql-database.html#cb21-7" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;history|philosophy|religious|literature|anthropology|sociology|political|psychology|international|language&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;class&quot;</span>),</span>
+<span id="cb21-8"><a href="creating-populating-sql-database.html#cb21-8" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;architecture|music|literature&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;caa&quot;</span>),</span>
+<span id="cb21-9"><a href="creating-populating-sql-database.html#cb21-9" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;agricultural|family|geospatial|veterinary&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;cals&quot;</span>),</span>
+<span id="cb21-10"><a href="creating-populating-sql-database.html#cb21-10" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;physics|earth|chemistry|biology|geography|geology|geospatial|mathematics&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;cos&quot;</span>),</span>
+<span id="cb21-11"><a href="creating-populating-sql-database.html#cb21-11" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;geospatial|forestry|wildlife|fisheries|geography|environmental&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;cnr&quot;</span>),</span>
+<span id="cb21-12"><a href="creating-populating-sql-database.html#cb21-12" tabindex="-1"></a>      <span class="fu">case_when</span>(<span class="fu">str_detect</span>(database_subjects[i], <span class="fu">regex</span>(<span class="st">&quot;law&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>)) <span class="sc">~</span> <span class="st">&quot;law&quot;</span>))</span>
+<span id="cb21-13"><a href="creating-populating-sql-database.html#cb21-13" tabindex="-1"></a>    </span>
+<span id="cb21-14"><a href="creating-populating-sql-database.html#cb21-14" tabindex="-1"></a>    college_list <span class="ot">&lt;-</span> college_list[<span class="sc">!</span><span class="fu">is.na</span>(college_list)]</span>
+<span id="cb21-15"><a href="creating-populating-sql-database.html#cb21-15" tabindex="-1"></a>  }),</span>
+<span id="cb21-16"><a href="creating-populating-sql-database.html#cb21-16" tabindex="-1"></a>  <span class="at">relevant_fycolls =</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(relevant_colleges), <span class="cf">function</span>(x){ <span class="co"># iterate through relevant_colleges column</span></span>
+<span id="cb21-17"><a href="creating-populating-sql-database.html#cb21-17" tabindex="-1"></a>    fiscal_year <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">2015</span><span class="sc">:</span><span class="dv">2022</span>) <span class="co"># this vector is b/c the dataset spans FY&#39;s 15-22</span></span>
+<span id="cb21-18"><a href="creating-populating-sql-database.html#cb21-18" tabindex="-1"></a>    <span class="fu">unlist</span>(<span class="fu">lapply</span>(relevant_colleges[[x]], <span class="cf">function</span>(y) <span class="fu">paste0</span>(fiscal_year,y)))})) <span class="sc">%&gt;%</span> <span class="co"># since each entry of relevant_colleges is a vector of length n &gt;= 1, we have to iterate through them and apply a paste0 to each entry in order to generate a list of relevant FY-coll ID&#39;s</span></span>
+<span id="cb21-19"><a href="creating-populating-sql-database.html#cb21-19" tabindex="-1"></a>  <span class="fu">filter</span>(database_name <span class="sc">!=</span> <span class="st">&quot;[Deleted]&quot;</span>) <span class="sc">%&gt;%</span> <span class="co"># databases which the library no longer has access to were recorded as &quot;[Deleted]&quot; in the spreadsheet. Since they had incomplete data, they were removed from the analysis.</span></span>
+<span id="cb21-20"><a href="creating-populating-sql-database.html#cb21-20" tabindex="-1"></a>  <span class="fu">filter</span>(relevant_colleges <span class="sc">!=</span> <span class="st">&quot;character(0)&quot;</span>) <span class="co"># Some databases were not tagged with any subjects (subject tagging is often manually done by librarians), so they were removed from the analysis.</span></span></code></pre></div>
+<p>With this information I can now generate a data.frame that records which databases are relevant to which FY’s and Colleges:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="creating-populating-sql-database.html#cb22-1" tabindex="-1"></a>database_fycoll_combos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb22-2"><a href="creating-populating-sql-database.html#cb22-2" tabindex="-1"></a>  <span class="at">database_id =</span> <span class="fu">unlist</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(database_stats), <span class="cf">function</span>(i){</span>
+<span id="cb22-3"><a href="creating-populating-sql-database.html#cb22-3" tabindex="-1"></a>    <span class="fu">rep</span>(database_stats<span class="sc">$</span>database_id[i], <span class="fu">length</span>(database_stats<span class="sc">$</span>relevant_fycolls[[i]])) <span class="co"># since databases might be relevant to more than one college and fiscal year we have to repeat their database_id entry.</span></span>
+<span id="cb22-4"><a href="creating-populating-sql-database.html#cb22-4" tabindex="-1"></a>  })),</span>
+<span id="cb22-5"><a href="creating-populating-sql-database.html#cb22-5" tabindex="-1"></a>  <span class="at">relevant_fycolls =</span> <span class="fu">unlist</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(database_stats), <span class="cf">function</span>(i) database_stats<span class="sc">$</span>relevant_fycolls[[i]])))</span>
+<span id="cb22-6"><a href="creating-populating-sql-database.html#cb22-6" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="creating-populating-sql-database.html#cb22-7" tabindex="-1"></a>database_fycoll_combos <span class="ot">&lt;-</span> database_fycoll_combos <span class="sc">%&gt;%</span> </span>
+<span id="cb22-8"><a href="creating-populating-sql-database.html#cb22-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">combo_id =</span> <span class="fu">UUIDgenerate</span>(<span class="at">n=</span><span class="fu">nrow</span>(database_fycoll_combos), <span class="at">output =</span> <span class="st">&quot;string&quot;</span>)) <span class="co"># generate universally unique id for each database FY-college combo</span></span>
+<span id="cb22-9"><a href="creating-populating-sql-database.html#cb22-9" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="creating-populating-sql-database.html#cb22-10" tabindex="-1"></a>database_stats <span class="ot">&lt;-</span> database_stats <span class="sc">%&gt;%</span> <span class="co"># remove the now-unnecessary columns from the database_stats data.frame.</span></span>
+<span id="cb22-11"><a href="creating-populating-sql-database.html#cb22-11" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>relevant_colleges,</span>
+<span id="cb22-12"><a href="creating-populating-sql-database.html#cb22-12" tabindex="-1"></a>          <span class="sc">-</span>relevant_fycolls</span>
+<span id="cb22-13"><a href="creating-populating-sql-database.html#cb22-13" tabindex="-1"></a>)</span></code></pre></div>
+<blockquote>
+<p>As a complete aside, I still do not understand why I could not declare and process the database_fycoll_combos data.frame within one pipe chain. The error I got when I tried to do so said database_fycoll_combos does not exist. Thoughts would be much appreciated!</p>
+</blockquote>
+</div>
+<div id="creating-the-sql-db-and-writing-to-it" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Creating the SQL DB and Writing to it<a href="creating-populating-sql-database.html#creating-the-sql-db-and-writing-to-it" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>That does it for our final, processed data.frames! We can now create a SQL database to store them so we don’t have to do all that data processing every time we want to work with them or send them to collaborators/reproducers.</p>
+<p>Because none of the columns in our final data.frames have nested lists, and we didn’t see any special characters that might cause encoding issues in the data, doing so is quite straightforward. We do have some columns (e.g., “database_name”) where the lengths of entries are not standardized, but since this is a relatively small dataset we can just provide generous memory allocations without worrying about finding their exact maximum length.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="creating-populating-sql-database.html#cb23-1" tabindex="-1"></a>predicting_resource_usage_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">&quot;processed_data/predicting_resource_usage.db&quot;</span>) <span class="co"># initialize db</span></span>
+<span id="cb23-2"><a href="creating-populating-sql-database.html#cb23-2" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="creating-populating-sql-database.html#cb23-3" tabindex="-1"></a><span class="co"># create tables</span></span>
+<span id="cb23-4"><a href="creating-populating-sql-database.html#cb23-4" tabindex="-1"></a><span class="fu">dbExecute</span>(predicting_resource_usage_db, <span class="st">&quot;CREATE TABLE university_variables (</span></span>
+<span id="cb23-5"><a href="creating-populating-sql-database.html#cb23-5" tabindex="-1"></a><span class="st">          fy_college varchar(9) NOT NULL,</span></span>
+<span id="cb23-6"><a href="creating-populating-sql-database.html#cb23-6" tabindex="-1"></a><span class="st">          total_outputs float NOT NULL,</span></span>
+<span id="cb23-7"><a href="creating-populating-sql-database.html#cb23-7" tabindex="-1"></a><span class="st">          grant_funding float NOT NULL,</span></span>
+<span id="cb23-8"><a href="creating-populating-sql-database.html#cb23-8" tabindex="-1"></a><span class="st">          grant_proposals integer NOT NULL,</span></span>
+<span id="cb23-9"><a href="creating-populating-sql-database.html#cb23-9" tabindex="-1"></a><span class="st">          total_enrollment integer NOT NULL,</span></span>
+<span id="cb23-10"><a href="creating-populating-sql-database.html#cb23-10" tabindex="-1"></a><span class="st">          PRIMARY KEY (fy_college)</span></span>
+<span id="cb23-11"><a href="creating-populating-sql-database.html#cb23-11" tabindex="-1"></a><span class="st">          );&quot;</span>)</span>
+<span id="cb23-12"><a href="creating-populating-sql-database.html#cb23-12" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="creating-populating-sql-database.html#cb23-13" tabindex="-1"></a><span class="fu">dbExecute</span>(predicting_resource_usage_db, <span class="st">&quot;CREATE TABLE resource_variables (</span></span>
+<span id="cb23-14"><a href="creating-populating-sql-database.html#cb23-14" tabindex="-1"></a><span class="st">          database_id varchar(8) NOT NULL,</span></span>
+<span id="cb23-15"><a href="creating-populating-sql-database.html#cb23-15" tabindex="-1"></a><span class="st">          database_name varchar(100) NOT NULL,</span></span>
+<span id="cb23-16"><a href="creating-populating-sql-database.html#cb23-16" tabindex="-1"></a><span class="st">          database_subjects varchar(100),</span></span>
+<span id="cb23-17"><a href="creating-populating-sql-database.html#cb23-17" tabindex="-1"></a><span class="st">          total_database_views integer,</span></span>
+<span id="cb23-18"><a href="creating-populating-sql-database.html#cb23-18" tabindex="-1"></a><span class="st">          total_views_fy15 integer,</span></span>
+<span id="cb23-19"><a href="creating-populating-sql-database.html#cb23-19" tabindex="-1"></a><span class="st">          total_views_fy16 integer,</span></span>
+<span id="cb23-20"><a href="creating-populating-sql-database.html#cb23-20" tabindex="-1"></a><span class="st">          total_views_fy17 integer,</span></span>
+<span id="cb23-21"><a href="creating-populating-sql-database.html#cb23-21" tabindex="-1"></a><span class="st">          total_views_fy18 integer,</span></span>
+<span id="cb23-22"><a href="creating-populating-sql-database.html#cb23-22" tabindex="-1"></a><span class="st">          total_views_fy19 integer,</span></span>
+<span id="cb23-23"><a href="creating-populating-sql-database.html#cb23-23" tabindex="-1"></a><span class="st">          total_views_fy20 integer,</span></span>
+<span id="cb23-24"><a href="creating-populating-sql-database.html#cb23-24" tabindex="-1"></a><span class="st">          total_views_fy21 integer,</span></span>
+<span id="cb23-25"><a href="creating-populating-sql-database.html#cb23-25" tabindex="-1"></a><span class="st">          total_views_fy22 integer,,</span></span>
+<span id="cb23-26"><a href="creating-populating-sql-database.html#cb23-26" tabindex="-1"></a><span class="st">          PRIMARY KEY (database_id)</span></span>
+<span id="cb23-27"><a href="creating-populating-sql-database.html#cb23-27" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
+<span id="cb23-28"><a href="creating-populating-sql-database.html#cb23-28" tabindex="-1"></a></span>
+<span id="cb23-29"><a href="creating-populating-sql-database.html#cb23-29" tabindex="-1"></a><span class="fu">dbExecute</span>(predicting_resource_usage_db, <span class="st">&quot;CREATE TABLE database_fycoll_combos (</span></span>
+<span id="cb23-30"><a href="creating-populating-sql-database.html#cb23-30" tabindex="-1"></a><span class="st">          combo_id varchar(50),</span></span>
+<span id="cb23-31"><a href="creating-populating-sql-database.html#cb23-31" tabindex="-1"></a><span class="st">          database_id varchar(8) NOT NULL,</span></span>
+<span id="cb23-32"><a href="creating-populating-sql-database.html#cb23-32" tabindex="-1"></a><span class="st">          relevant_fycolls varchar(9) NOT NULL,</span></span>
+<span id="cb23-33"><a href="creating-populating-sql-database.html#cb23-33" tabindex="-1"></a><span class="st">          PRIMARY KEY (combo_id),</span></span>
+<span id="cb23-34"><a href="creating-populating-sql-database.html#cb23-34" tabindex="-1"></a><span class="st">          FOREIGN KEY (relevant_fycolls) REFERENCES university_variables(fy_college),</span></span>
+<span id="cb23-35"><a href="creating-populating-sql-database.html#cb23-35" tabindex="-1"></a><span class="st">          FOREIGN KEY (database_id) REFERENCES resource_variables(database_id)</span></span>
+<span id="cb23-36"><a href="creating-populating-sql-database.html#cb23-36" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
+<span id="cb23-37"><a href="creating-populating-sql-database.html#cb23-37" tabindex="-1"></a></span>
+<span id="cb23-38"><a href="creating-populating-sql-database.html#cb23-38" tabindex="-1"></a><span class="co"># write data.frames to tables</span></span>
+<span id="cb23-39"><a href="creating-populating-sql-database.html#cb23-39" tabindex="-1"></a><span class="fu">dbWriteTable</span>(predicting_resource_usage_db, <span class="st">&quot;university_variables&quot;</span>, university_variables, <span class="at">overwrite =</span> <span class="cn">TRUE</span>) <span class="co"># overwrite = TRUE because, at this early proof-of-concept stage I don&#39;t anticipate the dataset getting any bigger and I didn&#39;t want to accidentally append a bunch of data to my db while repeatedly running scripts for debugging.</span></span>
+<span id="cb23-40"><a href="creating-populating-sql-database.html#cb23-40" tabindex="-1"></a><span class="fu">dbWriteTable</span>(predicting_resource_usage_db, <span class="st">&quot;resource_variables&quot;</span>, database_stats, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-41"><a href="creating-populating-sql-database.html#cb23-41" tabindex="-1"></a><span class="fu">dbWriteTable</span>(predicting_resource_usage_db, <span class="st">&quot;database_fycoll_combos&quot;</span>, database_fycoll_combos, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>On to visualizations!</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="cleaning-the-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="visualizing-the-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-creating-and-populating-sql-db.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

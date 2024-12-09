@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Visualizing the Data | Visualizing the Data</title>
+  <meta name="description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Visualizing the Data | Visualizing the Data" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Visualizing the Data | Visualizing the Data" />
+  
+  <meta name="twitter:description" content="A data processing project produced for Prof. Simona Picardi’s WLF 553 - Reproducible Data Science - course at the University of Idaho fall 2024." />
+  
+
+<meta name="author" content="Norm Lee" />
+
+
+<meta name="date" content="2024-12-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="creating-populating-sql-database.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Cleaning a Dataset of U of I Variables</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Cleaning a Dataset of U of I Library Database Usage and Institutional Variables</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#motivation"><i class="fa fa-check"></i><b>1.1</b> Motivation</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#sources"><i class="fa fa-check"></i><b>1.2</b> Sources</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#end-goals"><i class="fa fa-check"></i><b>1.3</b> End goals</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#following-along"><i class="fa fa-check"></i><b>1.4</b> Following along</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html"><i class="fa fa-check"></i><b>2</b> Cleaning the Data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#importing-packages-data"><i class="fa fa-check"></i><b>2.1</b> Importing Packages &amp; Data</a></li>
+<li class="chapter" data-level="2.2" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#exploring-the-data"><i class="fa fa-check"></i><b>2.2</b> Exploring the Data</a></li>
+<li class="chapter" data-level="2.3" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#data-cleaning"><i class="fa fa-check"></i><b>2.3</b> Data Cleaning</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-research-outputs-data.frame."><i class="fa fa-check"></i><b>2.3.1</b> The Research Outputs Data.frame.</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-enrollment-numbers-data.frame"><i class="fa fa-check"></i><b>2.4</b> The Enrollment Numbers Data.frame</a></li>
+<li class="chapter" data-level="2.5" data-path="cleaning-the-data.html"><a href="cleaning-the-data.html#the-grant-funding-data.frame"><i class="fa fa-check"></i><b>2.5</b> The Grant Funding Data.frame</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html"><i class="fa fa-check"></i><b>3</b> Creating &amp; Populating SQL Database</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#aggregating-university-level-variables"><i class="fa fa-check"></i><b>3.1</b> Aggregating University-Level Variables</a></li>
+<li class="chapter" data-level="3.2" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#aggregating-library-database-usage-data"><i class="fa fa-check"></i><b>3.2</b> Aggregating Library Database Usage Data</a></li>
+<li class="chapter" data-level="3.3" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#connecting-databases-to-colleges"><i class="fa fa-check"></i><b>3.3</b> Connecting Databases to Colleges</a></li>
+<li class="chapter" data-level="3.4" data-path="creating-populating-sql-database.html"><a href="creating-populating-sql-database.html#creating-the-sql-db-and-writing-to-it"><i class="fa fa-check"></i><b>3.4</b> Creating the SQL DB and Writing to it</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html"><i class="fa fa-check"></i><b>4</b> Visualizing the Data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#loading-the-data"><i class="fa fa-check"></i><b>4.1</b> Loading the Data</a></li>
+<li class="chapter" data-level="4.2" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#visualizing-the-data-1"><i class="fa fa-check"></i><b>4.2</b> Visualizing the Data</a></li>
+<li class="chapter" data-level="4.3" data-path="visualizing-the-data.html"><a href="visualizing-the-data.html#conclusion"><i class="fa fa-check"></i><b>4.3</b> Conclusion</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Visualizing the Data</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="visualizing-the-data" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Visualizing the Data<a href="visualizing-the-data.html#visualizing-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="loading-the-data" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Loading the Data<a href="visualizing-the-data.html#loading-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can load the data from our fancy new SQL database pretty easily:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="visualizing-the-data.html#cb24-1" tabindex="-1"></a>predicting_resource_usage_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">&quot;processed_data/predicting_resource_usage.db&quot;</span>)</span>
+<span id="cb24-2"><a href="visualizing-the-data.html#cb24-2" tabindex="-1"></a>univ_vars <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(predicting_resource_usage_db, <span class="st">&quot;SELECT * FROM university_variables;&quot;</span>)</span>
+<span id="cb24-3"><a href="visualizing-the-data.html#cb24-3" tabindex="-1"></a>database_vars <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(predicting_resource_usage_db, <span class="st">&quot;SELECT * FROM resource_variables;&quot;</span>)</span>
+<span id="cb24-4"><a href="visualizing-the-data.html#cb24-4" tabindex="-1"></a>combos <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(predicting_resource_usage_db, <span class="st">&quot;SELECT * FROM database_fycoll_combos;&quot;</span>)</span>
+<span id="cb24-5"><a href="visualizing-the-data.html#cb24-5" tabindex="-1"></a>all_data <span class="ot">&lt;-</span> <span class="fu">full_join</span>(database_vars, combos, <span class="at">by =</span> <span class="st">&quot;database_id&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">full_join</span>(univ_vars, <span class="fu">join_by</span>(<span class="st">&quot;relevant_fycolls&quot;</span> <span class="sc">==</span> <span class="st">&quot;fy_college&quot;</span>))</span></code></pre></div>
+</div>
+<div id="visualizing-the-data-1" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Visualizing the Data<a href="visualizing-the-data.html#visualizing-the-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Unfortunately, visualization is where untidiness comes back to bite me, and I learn a lot about the pitfalls of creating a “proof-of-concept” data processing workflow.</p>
+<p>If we recall, my two untidiness errors were:</p>
+<ol style="list-style-type: decimal">
+<li>Encoding both the fiscal year and College variables in a single column.</li>
+<li>Encoding both database views and fiscal year in the same column, across multiple columns of the “database_stats” - loaded here as “database_vars” - data.frame.</li>
+</ol>
+<p>Error 1 ended up being not that bad, because we can do a fairly simple mutate to the data.frame to split those variables, or we can split them ad hoc when visualizing the data. E.g., this visualization of the amount of research “effort” for the College of Engineering, broken down by fiscal year:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="visualizing-the-data.html#cb25-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">filter</span>(univ_vars, <span class="fu">str_detect</span>(fy_college, <span class="st">&quot;coe&quot;</span>)), <span class="co"># split out the &quot;College&quot; part</span></span>
+<span id="cb25-2"><a href="visualizing-the-data.html#cb25-2" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">str_sub</span>(fy_college, <span class="dv">1</span>, <span class="dv">4</span>),<span class="at">y =</span> total_outputs)) <span class="sc">+</span> <span class="co"># split out the FY part.</span></span>
+<span id="cb25-3"><a href="visualizing-the-data.html#cb25-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb25-4"><a href="visualizing-the-data.html#cb25-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fiscal Year&quot;</span>,</span>
+<span id="cb25-5"><a href="visualizing-the-data.html#cb25-5" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Research Output (effort units)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="visualizing-the-data.html#cb25-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Research Output </span><span class="sc">\&quot;</span><span class="st">Effort</span><span class="sc">\&quot;</span><span class="st">: College of Engineering&quot;</span>)</span></code></pre></div>
+<p>Error 2 is much more problematic. Without going back and modifying the database schema, we can fix it post-hoc by retrieving the row we want and pivoting that into a more workable dataframe:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="visualizing-the-data.html#cb26-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">filter</span>(database_vars, <span class="fu">str_detect</span>(database_name, <span class="st">&quot;Web of Science&quot;</span>))</span>
+<span id="cb26-2"><a href="visualizing-the-data.html#cb26-2" tabindex="-1"></a>dat_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(dat, <span class="at">cols =</span> <span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">12</span>))</span>
+<span id="cb26-3"><a href="visualizing-the-data.html#cb26-3" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> dat_long,</span>
+<span id="cb26-4"><a href="visualizing-the-data.html#cb26-4" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">str_sub</span>(name, <span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>), <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="visualizing-the-data.html#cb26-5" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb26-6"><a href="visualizing-the-data.html#cb26-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fiscal Year&quot;</span>,</span>
+<span id="cb26-7"><a href="visualizing-the-data.html#cb26-7" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Database Views&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="visualizing-the-data.html#cb26-8" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Web of Science views by Fiscal Year&quot;</span>)</span></code></pre></div>
+<p>But doing so is cumbersome. It becomes more so when combining the two data.frames to explore relationships between university variables and Library database usage because the fiscal year variables are encoded in two different, mutually contradictory, ways.</p>
+<p>For instance…</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="visualizing-the-data.html#cb27-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">filter</span>(all_data, <span class="fu">str_detect</span>(database_name, <span class="st">&quot;Web of Science&quot;</span>) <span class="sc">&amp;</span> <span class="fu">str_detect</span>(relevant_fycolls, <span class="st">&quot;coe&quot;</span>))</span>
+<span id="cb27-2"><a href="visualizing-the-data.html#cb27-2" tabindex="-1"></a>dat_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(dat, <span class="at">cols =</span> <span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">12</span>))</span></code></pre></div>
+<p>…produces a data.frame where entries in the “relevant_fycolls” column are repeated 7 times, one for each entry in the total databases views column (total_views_fy15, total_views_fy16, etc.). So, we have to add an additional filter to only retrieve the rows where those two columns match up:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="visualizing-the-data.html#cb28-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">filter</span>(all_data, <span class="fu">str_detect</span>(database_name, <span class="st">&quot;Web of Science&quot;</span>) <span class="sc">&amp;</span> <span class="fu">str_detect</span>(relevant_fycolls, <span class="st">&quot;coe&quot;</span>))</span>
+<span id="cb28-2"><a href="visualizing-the-data.html#cb28-2" tabindex="-1"></a>dat_long <span class="ot">&lt;-</span> <span class="fu">filter</span>(<span class="fu">pivot_longer</span>(dat, <span class="at">cols =</span> <span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">12</span>)), <span class="fu">as.integer</span>(<span class="fu">str_sub</span>(relevant_fycolls, <span class="dv">3</span>, <span class="dv">4</span>)) <span class="sc">==</span> <span class="fu">str_sub</span>(name, <span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>))</span></code></pre></div>
+<p>Then, we can visualize:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="visualizing-the-data.html#cb29-1" tabindex="-1"></a><span class="fu">ggplot</span>(dat_long, <span class="fu">aes</span>(<span class="at">x =</span> total_enrollment,</span>
+<span id="cb29-2"><a href="visualizing-the-data.html#cb29-2" tabindex="-1"></a>                     <span class="at">y =</span> value,</span>
+<span id="cb29-3"><a href="visualizing-the-data.html#cb29-3" tabindex="-1"></a>                     <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">&#39;FY&#39;</span>,<span class="fu">str_sub</span>(relevant_fycolls, <span class="dv">3</span>, <span class="dv">4</span>)))) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="visualizing-the-data.html#cb29-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb29-5"><a href="visualizing-the-data.html#cb29-5" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb29-6"><a href="visualizing-the-data.html#cb29-6" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="at">size =</span> <span class="fl">2.5</span>,</span>
+<span id="cb29-7"><a href="visualizing-the-data.html#cb29-7" tabindex="-1"></a>                  <span class="at">force_pull =</span> <span class="dv">3</span>,</span>
+<span id="cb29-8"><a href="visualizing-the-data.html#cb29-8" tabindex="-1"></a>                  <span class="at">force =</span> <span class="dv">5</span>) <span class="sc">+</span> </span>
+<span id="cb29-9"><a href="visualizing-the-data.html#cb29-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Total Enrollment&quot;</span>,</span>
+<span id="cb29-10"><a href="visualizing-the-data.html#cb29-10" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Database Views&quot;</span>)<span class="sc">+</span></span>
+<span id="cb29-11"><a href="visualizing-the-data.html#cb29-11" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Web of Science usage by CoE Enrollment (FY15:22)&quot;</span>)</span></code></pre></div>
+</div>
+<div id="conclusion" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Conclusion<a href="visualizing-the-data.html#conclusion" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Though not 100% successful, this project was still valuable for a number of reasons.</p>
+<p>First and foremost, I learned that for exploratory analyses without a definite research question, brainstorming concrete research questions you may want to answer - like the above - <em>at the beginning</em> can help with ensuring tidy data.</p>
+<p>Second, working through a data processing workflow can be helpful for uncovering researcher degrees of freedom. In this case, navigating the ambiguities around things like…</p>
+<ul>
+<li>using assets or enrollment as a proxy for research “effort” which may predict library usage</li>
+<li>using database subject tags to justify connecting databases with Colleges</li>
+</ul>
+<p>…can help inform potential future research designs, even determining whether data quality is high enough to justify the research.</p>
+<p>Finally, I learned a bunch of R!</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="creating-populating-sql-database.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/04-visualizing-the-data.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
